@@ -11,9 +11,9 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/products/{id}")
-    public ResponseEntity<?> getProductById(@PathVariable("id") String productId) {
-        return ResponseEntity.ok(productService.findProductById(productId));
+    @GetMapping("/products/{id}/{sk}")
+    public ResponseEntity<?> getProductById(@PathVariable("id") String productId, @PathVariable("sk") String sortKey) {
+        return ResponseEntity.ok(productService.findProductById(productId, sortKey));
     }
 
     @PostMapping("/products")

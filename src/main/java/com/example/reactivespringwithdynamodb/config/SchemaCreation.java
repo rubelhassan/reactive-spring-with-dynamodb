@@ -1,36 +1,29 @@
 package com.example.reactivespringwithdynamodb.config;
 
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
-import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.example.reactivespringwithdynamodb.product.Product;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class SchemaCreation {
-    @Autowired
-    private DynamoDBMapper dynamoDBMapper;
-
-    @Autowired
-    private AmazonDynamoDB amazonDynamoDB;
-
+    private final DynamoDbEnhancedClient dynamoDbEnhancedClient;
 
     @EventListener
     public void onApplicationEvent(ContextRefreshedEvent event) {
         try {
-            CreateTableRequest tableRequest = dynamoDBMapper
-                    .generateCreateTableRequest(Product.class);
-            tableRequest.setProvisionedThroughput(
-                    new ProvisionedThroughput(1L, 1L));
-            amazonDynamoDB.createTable(tableRequest);
-        } catch (Exception e){
+            dynamoDbEnhancedClient
+                    .table("Product", TableSchema.fromBean(Product.class))
+                    .createTable();
+            log.info("Product table creation on dynamo db is successful");
+        } catch (Exception e) {
             log.error("Error creating table at DynamoDB instance", e);
         }
     }

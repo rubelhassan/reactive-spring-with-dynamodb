@@ -11,8 +11,8 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public Optional<Product> findProductById(String id) {
-        return productRepository.findById(id);
+    public Optional<Product> findProductById(String id, String sortKey) {
+        return productRepository.findProductByIdAndName(id, sortKey);
     }
 
     public Product saveProduct(Product product) {

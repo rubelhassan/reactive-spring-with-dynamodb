@@ -2,4 +2,7 @@ List all tables:
     aws dynamodb list-tables --endpoint-url http://localhost:8000
 
 Scan full table:
-aws dynamodb scan --table-name Product  --endpoint-url http://localhost:8000
+    aws dynamodb scan --table-name Product  --endpoint-url http://localhost:8000
+
+Delete table:
+    aws dynamodb delete-table --table-name Product --endpoint-url http://localhost:8000
