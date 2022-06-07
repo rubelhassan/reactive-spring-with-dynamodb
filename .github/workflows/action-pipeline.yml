@@ -22,5 +22,9 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
-      run: mvn clean install & wait
+    - name: Show Current Directory
+      run: echo $(pwd)
+    - name: Run Tests
+      run: mvn clean test & wait
+    - name: Build Application Package
+      run: mvn clean package
